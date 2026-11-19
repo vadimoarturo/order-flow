@@ -1,0 +1,37 @@
+{
+  "name": "orderflow",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "typecheck": "npm run typecheck --workspaces && tsc -p tsconfig.tests.json",
+    "test": "node scripts/unit-tests.mjs",
+    "test:integration": "tsx --test apps/api/test/integration.test.ts",
+    "test:e2e": "playwright test",
+    "dev:api": "npm run dev -w apps/api",
+    "dev:web": "npm run dev -w apps/web",
+    "allure": "allure generate allure-results --clean -o allure-report",
+    "format": "prettier --write apps tests scripts infra compose.yaml playwright.config.ts .github",
+    "format:check": "prettier --check apps tests scripts infra compose.yaml playwright.config.ts .github",
+    "prisma:generate": "npm run prisma:generate -w apps/api",
+    "postinstall": "npm run prisma:generate",
+    "check:architecture": "node scripts/check-architecture.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.58.2",
+    "@types/node": "22.19.11",
+    "allure-commandline": "2.36.0",
+    "allure-playwright": "3.4.5",
+    "prettier": "3.8.1",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3"
+  },
+  "overrides": {
+    "glob": "14.0.2",
+    "multer": "2.5.0",
+    "deepmerge-ts": "8.0.2"
+  }
+}

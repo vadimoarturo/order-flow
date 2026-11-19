@@ -1,0 +1,8 @@
+{
+  "extends": "./apps/api/tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": ["apps/api/src/**/*.ts", "apps/api/test/**/*.ts", "tests/**/*.ts", "playwright.config.ts"],
+  "exclude": ["node_modules"]
+}

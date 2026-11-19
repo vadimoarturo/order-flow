@@ -1,0 +1,16 @@
+node_modules/
+.next/
+dist/
+.env
+.env.*
+!.env.example
+allure-results/
+allure-report/
+playwright-report/
+test-results/
+*.log
+.DS_Store
+
+docs/PLAN.md
+*.tsbuildinfo
+docs/pdf-review/

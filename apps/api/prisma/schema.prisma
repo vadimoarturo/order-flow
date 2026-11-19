@@ -1,0 +1,156 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x", "linux-arm64-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id          String      @id
+  name        String
+  category    String
+  description String
+  price       Int
+  stock       Int
+  color       String
+  art         String
+  items       OrderItem[]
+
+  @@map("products")
+}
+
+model Order {
+  id             String           @id @db.Uuid
+  trackingToken  String           @unique @map("tracking_token") @db.Uuid
+  idempotencyKey String           @unique @map("idempotency_key") @db.Uuid
+  requestHash    String           @map("request_hash")
+  customer       String
+  address        String
+  status         String
+  total          Int
+  traceId        String           @map("trace_id") @db.Uuid
+  version        Int              @default(1)
+  createdAt      DateTime         @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime         @default(now()) @map("updated_at") @db.Timestamptz
+  items          OrderItem[]
+  history        OrderHistory[]
+  events         OutboxEvent[]
+  jobs           IntegrationJob[]
+
+  @@index([createdAt(sort: Desc)], map: "orders_created")
+  @@map("orders")
+}
+
+model OrderItem {
+  orderId   String  @map("order_id") @db.Uuid
+  productId String  @map("product_id")
+  name      String
+  quantity  Int
+  price     Int
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  product   Product @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([orderId, productId])
+  @@map("order_items")
+}
+
+model OrderHistory {
+  id        BigInt   @id @default(autoincrement())
+  orderId   String   @map("order_id") @db.Uuid
+  status    String
+  detail    String
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([orderId, id], map: "history_order")
+  @@map("order_history")
+}
+
+model OutboxEvent {
+  id          String    @id @db.Uuid
+  orderId     String    @map("order_id") @db.Uuid
+  kind        String
+  traceId     String    @map("trace_id") @db.Uuid
+  payload     Json
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  publishedAt DateTime? @map("published_at") @db.Timestamptz
+  order       Order     @relation(fields: [orderId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("outbox")
+}
+
+model InboxEvent {
+  eventId    String           @id @map("event_id") @db.Uuid
+  receivedAt DateTime         @default(now()) @map("received_at") @db.Timestamptz
+  jobs       IntegrationJob[]
+
+  @@map("inbox")
+}
+
+model IntegrationJob {
+  id            String     @id @db.Uuid
+  eventId       String     @map("event_id") @db.Uuid
+  orderId       String     @map("order_id") @db.Uuid
+  kind          String
+  traceId       String     @map("trace_id") @db.Uuid
+  state         String     @default("pending")
+  attempts      Int        @default(0)
+  recoveryCount Int        @default(0) @map("recovery_count")
+  nextRunAt     DateTime   @default(now()) @map("next_run_at") @db.Timestamptz
+  lockedUntil   DateTime?  @map("locked_until") @db.Timestamptz
+  leaseToken    String?    @map("lease_token") @db.Uuid
+  lastError     String?    @map("last_error")
+  createdAt     DateTime   @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime   @default(now()) @map("updated_at") @db.Timestamptz
+  order         Order      @relation(fields: [orderId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  event         InboxEvent @relation(fields: [eventId], references: [eventId], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([orderId, kind])
+  @@index([orderId], map: "jobs_order")
+  @@map("jobs")
+}
+
+model AuditEntry {
+  id        BigInt   @id @default(autoincrement())
+  actor     String
+  role      String
+  action    String
+  target    String
+  reason    String
+  traceId   String   @map("trace_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@map("audit")
+}
+
+model ServiceControl {
+  service   String  @id
+  available Boolean @default(true)
+
+  @@map("integration_controls")
+}
+
+model IntegrationReceipt {
+  operationKey String   @id @map("operation_key")
+  requestHash  String   @map("request_hash")
+  response     Json
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@map("integration_receipts")
+}
+
+model KafkaQuarantine {
+  id          BigInt   @id @default(autoincrement())
+  topic       String
+  partition   Int
+  offsetValue String   @map("offset_value")
+  reason      String
+  payload     String?
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@unique([topic, partition, offsetValue])
+  @@map("kafka_quarantine")
+}

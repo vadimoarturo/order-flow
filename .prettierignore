@@ -1,0 +1,14 @@
+node_modules
+.next
+**/.next
+**/dist
+package-lock.json
+*.svg
+*.pdf
+docs/screenshots
+docs/pdf-review
+playwright-report
+allure-results
+allure-report
+test-results
+apps/web/next-env.d.ts
