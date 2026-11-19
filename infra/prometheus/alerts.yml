@@ -1,0 +1,22 @@
+groups:
+  - name: orderflow
+    rules:
+      - alert: OrderFlowDeadLetterQueue
+        expr: orderflow_jobs{job="api",state="dlq"} > 0
+        for: 10s
+        labels: { severity: warning }
+        annotations:
+          summary: 'An integration job needs recovery'
+          description: 'Open http://localhost:3000/operations, inspect the failed job and trace ID, restore its dependency, then retry with a reason.'
+      - alert: OrderFlowOutboxStalled
+        expr: orderflow_outbox_oldest_seconds{job="api"} > 60
+        for: 15s
+        labels: { severity: warning }
+        annotations:
+          summary: 'Outbox has unpublished events older than 60 seconds'
+      - alert: OrderFlowHiddenDown
+        expr: up{job="hidden"} == 0
+        for: 15s
+        labels: { severity: critical }
+        annotations:
+          summary: 'Hidden processor metrics endpoint is unreachable'
