@@ -1,0 +1,61 @@
+{
+  "date": "2026-11-19",
+  "timezone": "Europe/Moscow",
+  "demo": true,
+  "environment": {
+    "host": "macOS arm64",
+    "hostNode": "v20.20.0",
+    "containerNode": "v22.23.5",
+    "docker": "25.0.2"
+  },
+  "unit": {
+    "passed": 15,
+    "failed": 0
+  },
+  "integration": {
+    "passed": 6,
+    "failed": 0
+  },
+  "e2e": {
+    "passed": 7,
+    "failed": 0,
+    "skipped": 0,
+    "flaky": 0,
+    "browser": "Chromium"
+  },
+  "npmAudit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "checks": {
+    "typecheck": "passed",
+    "format": "passed",
+    "localProductionBuild": "passed",
+    "dockerBuild": "passed",
+    "composeHealth": "passed",
+    "prometheusRules": "3 valid rules",
+    "dlqAlert": "firing observed by E2E; cleared after recovery"
+  },
+  "notRun": [
+    "production deployment",
+    "load/soak tests",
+    "multi-node failover",
+    "exhaustive chaos tests",
+    "cross-browser suite"
+  ],
+  "presentation": {
+    "file": "docs/OrderFlow-Portfolio.pdf",
+    "pages": 8,
+    "review": "All eight regenerated PDF pages rendered with Poppler and visually inspected on 19 November 2026",
+    "allureReport": "generated successfully",
+    "screenshots": "captured from the running local demo"
+  },
+  "remoteCi": {
+    "url": "https://github.com/vadimoarturo/order-flow/actions/workflows/ci.yml",
+    "status": "See the linked workflow for the current remote result"
+  }
+}

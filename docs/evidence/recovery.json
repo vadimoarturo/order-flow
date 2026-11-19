@@ -1,0 +1,44 @@
+{
+  "capturedAt": "2026-11-19T09:19:09.551Z",
+  "demo": true,
+  "job": {
+    "id": "e3ea8000-375b-4e15-a46c-8f0f20eba5ca",
+    "eventId": "ee071428-1bf5-45c2-a4e4-54b9f0431176",
+    "orderId": "6199e011-b0ca-4737-8186-da4d11c2d3e9",
+    "kind": "ship",
+    "traceId": "8f68ada4-0191-4bb7-aed2-f9405d1e1c70",
+    "state": "succeeded",
+    "attempts": 1,
+    "recoveryCount": 1,
+    "nextRunAt": "2026-11-19T09:18:41.939Z",
+    "lockedUntil": null,
+    "leaseToken": null,
+    "lastError": null,
+    "createdAt": "2026-11-19T09:18:00.236Z",
+    "updatedAt": "2026-11-19T09:18:42.193Z",
+    "order_id": "6199e011-b0ca-4737-8186-da4d11c2d3e9",
+    "event_id": "ee071428-1bf5-45c2-a4e4-54b9f0431176",
+    "trace_id": "8f68ada4-0191-4bb7-aed2-f9405d1e1c70",
+    "recovery_count": 1,
+    "next_run_at": "2026-11-19T09:18:41.939Z",
+    "locked_until": null,
+    "lease_token": null,
+    "last_error": null,
+    "created_at": "2026-11-19T09:18:00.236Z",
+    "updated_at": "2026-11-19T09:18:42.193Z"
+  },
+  "audit": [
+    {
+      "id": 50,
+      "actor": "demo-oncall",
+      "role": "oncall",
+      "action": "job.retry",
+      "target": "e3ea8000-375b-4e15-a46c-8f0f20eba5ca",
+      "reason": "Portfolio demo: planned recovery exercise.",
+      "traceId": "8f68ada4-0191-4bb7-aed2-f9405d1e1c70",
+      "createdAt": "2026-11-19T09:18:41.941Z",
+      "trace_id": "8f68ada4-0191-4bb7-aed2-f9405d1e1c70",
+      "created_at": "2026-11-19T09:18:41.941Z"
+    }
+  ]
+}
