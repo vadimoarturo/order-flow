@@ -36,6 +36,8 @@ Tests preserve the existing demo database. Integration tests create and remove o
 
 Next.js regenerates `next-env.d.ts` during type generation, so Prettier excludes that generated file. Docker build context excludes environment files and generated reports. Generated presentation HTML remains local; the PDF and screenshots are versioned.
 
+The initial remote run passed the static checks, Compose startup and all six SQL scenarios, then found that `ubuntu-latest` had moved to Ubuntu 26.04, which the pinned Playwright release does not support. CI now pins Ubuntu 24.04, a supported browser-test platform, instead of following that moving runner alias. The linked Actions workflow records the subsequent result.
+
 The Nest CLI's transitive Glob dependency is pinned to 14.0.2 through an npm override, addressing the [Glob cancellation advisory](https://github.com/advisories/GHSA-3g3m-2fjr-6pw4) and resolving a patched Minimatch dependency. Production builds and the Compose stack were rebuilt with the updated lockfile; the Nest CLI remains on the existing major version.
 
 ## Recorded evidence
